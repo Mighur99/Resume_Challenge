@@ -13,7 +13,21 @@ Resources:
   MyWebsite:
     Type: AWS::S3::Bucket
     Properties:
+      WebsiteConfiguration:
+        IndexDocument: index.html
       BucketName: mighur-website
+  MyWebsitePolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: MyWebsite
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action: s3:GetObject
+          Resource:
+            Fn::Sub: arn:aws:s3:::${MyWebsite}/*
+          Principal: IAM-ADMIN-USER
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
